@@ -1,15 +1,148 @@
-CREATE DATABASE IF NOT EXISTS miBaseDatos;
-USE miBaseDatos;
+create database if not exists gestionBiblioteca;
+use gestionBiblioteca;
 
-CREATE TABLE IF NOT EXISTS usuarios (
-    usuario VARCHAR(50) PRIMARY KEY,
-    clave VARCHAR(10) NOT NULL, 
-    direccion  VARCHAR(100)
+create table if not exists libros (
+    id_libro int auto_increment not null,
+    nombre_libro varchar(255) not null,
+    autor_libro varchar(255) not null,
+    genero_libro varchar(255),
+    anyo_publicacion int,
+    descripcion text,
+    constraint pk_libros primary key (id_libro)
 );
 
--- Usuario de prueba
-INSERT INTO usuarios (usuario, clave, direccion) VALUES ('pepep', 'pepe1234', 'Calle Proyecto')
-ON DUPLICATE KEY UPDATE clave = 'pepe1234';
+create table if not exists usuarios (
+    id_usuario int auto_increment not null,
+    nombre_usuario varchar(255) not null,
+    apellidos_usuario varchar(255),
+    email_usuario varchar(255) not null unique,
+    telefono_usuario varchar(20),
+    fecha_registro date not null,
+    constraint pk_usuarios primary key (id_usuario)
+);
 
-INSERT INTO usuarios (usuario, clave, direccion) VALUES ('pepa', 'pepe1234', 'Calle Proyecto 2')
-ON DUPLICATE KEY UPDATE clave = 'pepe1234';
+create table if not exists prestamos (
+    id_prestamo int auto_increment not null,
+    id_libro int not null,
+    id_usuario int not null,
+    fecha_prestamo date not null,
+    fecha_devolucion date,
+    devuelto boolean default false,
+    constraint pk_prestamos primary key (id_prestamo),
+    constraint fk_libro foreign key (id_libro) references libros(id_libro),
+    constraint fk_usuario foreign key (id_usuario) references usuarios(id_usuario)
+);
+
+
+-- Valores de Libros
+insert into libros (nombre_libro, autor_libro, genero_libro, anyo_publicacion, descripcion) values
+('Elantris', 'Brandon Sanderson', 'Fantasía', 2005, 'La ciudad de los dioses caídos.'),
+('El Imperio Final', 'Brandon Sanderson', 'Fantasía', 2006, 'Una rebelión contra un imperio inmortal.'),
+('El Pozo De La Ascensión', 'Brandon Sanderson', 'Fantasía', 2007, 'Una lucha por el poder tras la caída.'),
+('El Héroe De Las Eras', 'Brandon Sanderson', 'Fantasía', 2008, 'La conclusión de una épica trilogía.'),
+('El Camino De Los Reyes', 'Brandon Sanderson', 'Fantasía', 2010, 'Primera parte del Archivo de las Tormentas.'),
+('Palabras Radiantes', 'Brandon Sanderson', 'Fantasía', 2014, 'Segunda parte del Archivo de las Tormentas.'),
+('Juramentada', 'Brandon Sanderson', 'Fantasía', 2017, 'Tercera parte del Archivo de las Tormentas.'),
+('El Ritmo De La Guerra', 'Brandon Sanderson', 'Fantasía', 2020, 'Cuarta parte del Archivo de las Tormentas.'),
+('El Aliento De Los Dioses', 'Brandon Sanderson', 'Fantasía', 2009, 'Una historia independiente en Nalthis.'),
+('Arena Blanca', 'Brandon Sanderson', 'Fantasía', 2016, 'Una novela gráfica ambientada en el Cosmere.'),
+('Harry Potter Y La Piedra Filosofal', 'J.K. Rowling', 'Fantasía', 1997, 'El inicio del joven mago.'),
+('Harry Potter Y La Cámara Secreta', 'J.K. Rowling', 'Fantasía', 1998, 'El misterio de una cámara oculta.'),
+('Harry Potter Y El Prisionero De Azkaban', 'J.K. Rowling', 'Fantasía', 1999, 'Un fugitivo amenaza Hogwarts.'),
+('Harry Potter Y El Cáliz De Fuego', 'J.K. Rowling', 'Fantasía', 2000, 'Un torneo peligroso en Hogwarts.'),
+('Harry Potter Y La Orden Del Fénix', 'J.K. Rowling', 'Fantasía', 2003, 'Una rebelión contra el ministerio.'),
+('Harry Potter Y El Misterio Del Príncipe', 'J.K. Rowling', 'Fantasía', 2005, 'Secretos del pasado de Voldemort.'),
+('Harry Potter Y Las Reliquias De La Muerte', 'J.K. Rowling', 'Fantasía', 2007, 'El final de la batalla contra Voldemort.'),
+('1984', 'George Orwell', 'Distopía', 1949, 'Una crítica al totalitarismo.'),
+('Rebelión En La Granja', 'George Orwell', 'Sátira', 1945, 'Una fábula política sobre una granja.'),
+('Un Mundo Feliz', 'Aldous Huxley', 'Distopía', 1932, 'Una sociedad tecnológicamente avanzada.'),
+('Fahrenheit 451', 'Ray Bradbury', 'Distopía', 1953, 'Una sociedad donde los libros están prohibidos.'),
+('Dune', 'Frank Herbert', 'Ciencia Ficción', 1965, 'La lucha por el control del desierto.'),
+('El Mesías De Dune', 'Frank Herbert', 'Ciencia Ficción', 1969, 'Las consecuencias del poder absoluto.'),
+('Neuromante', 'William Gibson', 'Ciencia Ficción', 1984, 'El origen del cyberpunk.'),
+('La Carretera', 'Cormac McCarthy', 'Distopía', 2006, 'Una travesía en un mundo postapocalíptico.'),
+('Soy Leyenda', 'Richard Matheson', 'Terror', 1954, 'El último hombre vivo contra vampiros.'),
+('Drácula', 'Bram Stoker', 'Terror', 1897, 'El clásico del conde vampiro.'),
+('Frankenstein', 'Mary Shelley', 'Terror', 1818, 'El monstruo creado por un científico.'),
+('El Retrato De Dorian Gray', 'Oscar Wilde', 'Fantasía', 1890, 'La corrupción y la belleza eterna.'),
+('El Hobbit', 'J.R.R. Tolkien', 'Fantasía', 1937, 'La aventura de Bilbo Bolsón.'),
+('El Señor De Los Anillos: La Comunidad Del Anillo', 'J.R.R. Tolkien', 'Fantasía', 1954, 'El inicio del viaje del anillo.'),
+('El Señor De Los Anillos: Las Dos Torres', 'J.R.R. Tolkien', 'Fantasía', 1954, 'La batalla se intensifica.'),
+('El Señor De Los Anillos: El Retorno Del Rey', 'J.R.R. Tolkien', 'Fantasía', 1955, 'El desenlace épico del viaje.'),
+('El Silmarillion', 'J.R.R. Tolkien', 'Fantasía', 1977, 'La mitología de la Tierra Media.'),
+('Fundación', 'Isaac Asimov', 'Ciencia Ficción', 1951, 'El inicio de una saga galáctica.'),
+('Yo, Robot', 'Isaac Asimov', 'Ciencia Ficción', 1950, 'Una serie de relatos sobre robots.'),
+('El Código Da Vinci', 'Dan Brown', 'Thriller', 2003, 'Una búsqueda de secretos ocultos en el arte.'),
+('Ángeles Y Demonios', 'Dan Brown', 'Thriller', 2000, 'Una conspiración en el Vaticano.'),
+('El Símbolo Perdido', 'Dan Brown', 'Thriller', 2009, 'Una carrera contra el tiempo en Washington.'),
+('Asesinato En El Orient Express', 'Agatha Christie', 'Misterio', 1934, 'Un crimen a bordo de un tren.'),
+('Muerte En El Nilo', 'Agatha Christie', 'Misterio', 1937, 'Un asesinato durante un crucero por Egipto.'),
+('El Asesinato De Roger Ackroyd', 'Agatha Christie', 'Misterio', 1926, 'Un clásico del misterio con un giro final.'),
+('La Sombra Del Viento', 'Carlos Ruiz Zafón', 'Misterio', 2001, 'Primera novela de la saga El Cementerio de los Libros Olvidados.');
+
+-- Valores de Usuarios
+insert into usuarios (nombre_usuario, apellidos_usuario, email_usuario, telefono_usuario, fecha_registro) values
+('Alberto', 'García López', 'albertogarcia@gmail.com', '695572990', '2025-01-09'),
+('Ana', 'Martínez Sánchez', 'anamartinez@hotmail.com', '650399141', '2024-06-23'),
+('Lucía', 'Rodríguez Gómez', 'luciarodriguez@yahoo.com', '661404809', '2024-06-23'),
+('Carmen', 'López Fernández', 'carmenlopez@gmail.com', '650454509', '2024-03-20'),
+('David', 'Sánchez Ruiz', 'davidsanchez@hotmail.com', '610623118', '2024-01-23'),
+('Sofía', 'Pérez Díaz', 'sofiaperez@yahoo.com', '663619926', '2024-10-18'),
+('Laura', 'Gómez Muñoz', 'lauragomez@gmail.com', '652197998', '2024-05-26'),
+('Isabel', 'Fernández Jiménez', 'isabelfernandez@hotmail.com', '679230491', '2025-02-22'),
+('Paula', 'Torres Moreno', 'paulatorres@yahoo.com', '649931993', '2024-06-24'),
+('Carlos', 'Ramírez Martínez', 'carlosramirez@gmail.com', '688697039', '2024-12-27'),
+('Nicolás', 'Pérez de Ayala', 'nicolasperezdeayala@gmail.com', '650607571', '2025-05-19'),
+('David', 'Castro Villar', 'davidcastrovillar@hotmail.com', '618107546', '2024-10-01'),
+('Sofía', 'Torres Castillo', 'sofiatorres@yahoo.com', '606684515', '2024-10-20'),
+('Carmen', 'Álvarez Romero', 'carmenalvarez@gmail.com', '695901816', '2024-07-18'),
+('Lucía', 'Romero Delgado', 'luciaromero@hotmail.com', '618722789', '2025-01-05'),
+('Alberto', 'Sánchez Ortiz', 'albertosanchez@yahoo.com', '605477382', '2024-01-27'),
+('Diego', 'Rodríguez Muñoz', 'diegorodriguez@gmail.com', '668158622', '2025-04-14'),
+('Luis', 'Vargas Mendoza', 'luisvargas@hotmail.com', '652607920', '2024-04-07'),
+('Miguel', 'Castro Rico', 'miguelcastro@yahoo.com', '616100529', '2025-03-27'),
+('Lucía', 'Jiménez Palacios', 'luciajimenez@gmail.com', '689508666', '2024-10-28'),
+('Paula', 'Martínez Cordero', 'paulamartinez@hotmail.com', '645290103', '2024-12-28'),
+('Laura', 'Hernández Vega', 'laurahernandez@yahoo.com', '629855275', '2025-01-23'),
+('Luis', 'Pérez Santos', 'luisperez@gmail.com', '693315402', '2024-06-19'),
+('Ana', 'Gómez Núñez', 'anagomez@hotmail.com', '654221396', '2024-07-31'),
+('Ana', 'Morales Castillo', 'anamorales@yahoo.com', '659330060', '2024-10-07'),
+('Carlos', 'Torres Herrera', 'carlostorres@gmail.com', '617371558', '2025-02-12'),
+('María', 'Martínez Ruiz', 'mariamartinez@hotmail.com', '610104534', '2024-04-07'),
+('Fernando', 'Ramírez López', 'fernandoramirez@yahoo.com', '683483375', '2024-02-06'),
+('Alberto', 'Ruiz Medina', 'albertoruiz@gmail.com', '698412633', '2024-08-09'),
+('Fernando', 'Romero Pardo', 'fernandoromero@hotmail.com', '619726800', '2025-04-28'),
+('Isabel', 'Sánchez López', 'isabelsanchez@yahoo.com', '606123457', '2024-09-15'),
+('Jorge', 'Hernández García', 'jorgehernandez@gmail.com', '651234890', '2024-11-02'),
+('Elena', 'Pérez Martínez', 'elenaperez@hotmail.com', '613456789', '2025-03-11'),
+('Jorge', 'Castro Ramírez', 'jorgecastro@yahoo.com', '632198745', '2024-05-01'),
+('Lucía', 'Gómez Fernández', 'luciagomez@gmail.com', '699876543', '2024-12-01'),
+('Pedro', 'López Durán', 'pedrolopez@hotmail.com', '658765432', '2024-07-07'),
+('Sofía', 'Morales Ruiz', 'sofiamorales@yahoo.com', '646543219', '2024-03-14'),
+('Diego', 'García Pérez', 'diegogarcia@gmail.com', '637654321', '2025-02-28'),
+('Sara', 'Díaz Rodríguez', 'saradiaz@hotmail.com', '613579246', '2024-08-30'),
+('Raúl', 'Álvarez Torres', 'raulalvarez@yahoo.com', '620987654', '2025-01-14'),
+('Marta', 'Fernández Gómez', 'martagonzalez@gmail.com', '634321098', '2024-06-18');
+
+-- Valores de Préstamos
+insert into prestamos (id_libro, id_usuario, fecha_prestamo, fecha_devolucion, devuelto) values
+(40, 35, '2025-01-12', null, false),
+(14, 27, '2024-10-13', null, false),
+(19, 19, '2025-02-27', '2025-03-13', true),
+(7, 13, '2025-01-15', null, false),
+(26, 6, '2024-05-02', '2024-06-25', true),
+(29, 15, '2025-03-23', '2025-05-09', true),
+(5, 3, '2024-12-02', null, false),
+(39, 14, '2024-11-20', null, false),
+(12, 22, '2024-03-21', '2024-07-07', true),
+(28, 35, '2025-03-06', null, false),
+(2, 4, '2024-09-17', null, false),
+(38, 4, '2024-01-25', null, false),
+(37, 7, '2025-05-04', null, false),
+(1, 9, '2024-07-09', null, false),
+(11, 34, '2025-03-21', '2025-05-17', true),
+(40, 14, '2024-11-04', null, false),
+(21, 33, '2024-10-14', null, false),
+(36, 13, '2025-02-27', null, false),
+(20, 9, '2024-01-12', null, false),
+(34, 2, '2024-06-23', '2024-12-03', true);
