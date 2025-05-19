@@ -1,5 +1,15 @@
 package dam.primero.servlet;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -7,13 +17,6 @@ import org.thymeleaf.templateresolver.WebApplicationTemplateResolver;
 import org.thymeleaf.web.servlet.IServletWebExchange;
 import org.thymeleaf.web.servlet.JavaxServletWebApplication;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.util.*;
-
-import dam.primero.dao.UsuarioDao;
 import dam.primero.modelos.Usuario;
 
 public class MiServlet extends HttpServlet {
@@ -95,8 +98,8 @@ public class MiServlet extends HttpServlet {
 		boolean correcto = false;
 
 		try {
-			UsuarioDao dao = new UsuarioDao();
-			correcto = dao.validar(usuario, clave);
+			/*UsuarioDao dao = new UsuarioDao();
+			correcto = dao.validar(usuario, clave);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -110,8 +113,8 @@ public class MiServlet extends HttpServlet {
 		// base de datos
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		try {
-			UsuarioDao dao = new UsuarioDao();
-			usuarios = dao.obtenerUsuarios();
+			//UsuarioDao dao = new UsuarioDao();
+			//usuarios = dao.obtenerUsuarios();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,8 +126,8 @@ public class MiServlet extends HttpServlet {
 	{
 		Usuario u= null;
 		try {
-			UsuarioDao dao = new UsuarioDao();
-			u = dao.getDetalleUsuario(nombre);
+			//UsuarioDao dao = new UsuarioDao();
+			//u = dao.getDetalleUsuario(nombre);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
